@@ -1,30 +1,39 @@
-public class Food {
-    String name;
-    double price;
-    int orderQuantity;
-    int prepTime;
-    int quantityPerBatch;
+abstract public class Food {
+    private String name;
+    private int orderQuantity;
 
-    //	Constructor for Burrito, Fries and Soda
     public Food(String name, int orderQuantity) {
-        if (name.equalsIgnoreCase("Fries")) {
-            this.name = name;
-            this.price = 4;
-            this.orderQuantity = orderQuantity;
-            this.prepTime = 8;
-            this.quantityPerBatch = 5;
-        }
-        else if (name.equalsIgnoreCase("Burrito")) {
-            this.name = name;
-            this.price = 7;
-            this.orderQuantity = orderQuantity;
-            this.prepTime = 9;
-            this.quantityPerBatch = 2;
-        }
-        else if (name.equalsIgnoreCase("Soda")) {
-            this.name = name;
-            this.price = 2.50;
-            this.orderQuantity = orderQuantity;
-        }
+        setName(name);
+        setOrderQuantity(orderQuantity);
     }
+
+    //    Getter and Setter for the constructor
+    public void setName(String foodName) {
+        this.name = foodName;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setOrderQuantity(int quantity) {
+        this.orderQuantity = quantity;
+    }
+
+    public int getOrderQuantity() {
+        return this.orderQuantity;
+    }
+
+    abstract double getPrice();
+
+    abstract void setPrice(double newPrice);
+
+    public int getQuantityPerBatch() {
+        return 0;
+    }
+
+    public int getPrepTime() {
+        return 0;
+    }
+    
 }
