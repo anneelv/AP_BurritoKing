@@ -15,7 +15,9 @@ public class Fries extends Food{
 
     public double getPrice() { return price; }
 
+    @Override
     public int getQuantityPerBatch() { return this.quantityPerBatch; }
 
+    @Override
     public int getPrepTime() {return this.prepTime; }
 }

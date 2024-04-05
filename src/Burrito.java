@@ -11,13 +11,13 @@ public class Burrito extends Food{
     }
 
     //    Getter and Setter for Fries price
-    @Override
     public void setPrice(double newPrice) { price = newPrice; }
 
-   @Override
     public double getPrice() { return price; }
 
+    @Override
     public int getQuantityPerBatch() { return this.quantityPerBatch; }
 
+    @Override
     public int getPrepTime() {return this.prepTime; }
 }
