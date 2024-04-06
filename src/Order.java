@@ -111,13 +111,13 @@ public class Order {
     }
 
     private void orderMeal(int quantity) {
-        Burrito burrito = new Burrito("Burrito(MS)", 1);
+        Burrito burrito = new Burrito("Burrito(MS)", quantity);
         foodOrder.add(burrito);
 
-        Fries fries = new Fries("Fries(MS)", 1);
+        Fries fries = new Fries("Fries(MS)", quantity);
         foodOrder.add(fries);
 
-        Soda soda = new Soda("Soda(MS)", 1);
+        Soda soda = new Soda("Soda(MS)", quantity);
         foodOrder.add(soda);
         totalPrice = totalPrice + ((burrito.getPrice() * quantity + fries.getPrice() * quantity + soda.getPrice() * quantity) - (3 * quantity));
         mealCount += quantity;
@@ -238,9 +238,48 @@ public class Order {
     }
 
     private void clearCurrentOrder() {
+        sales.setLeftoverFries(remainingFriesQuantity);
+        sales.setTotalSales(totalPrice);
+        setupInfoForSales();
         foodOrder.clear();
         totalPrice = 0;
         mealCount = 0;
+    }
+
+    private void setupInfoForSales() {
+        int burritoQuantity = 0;
+        int friesQuantity = 0;
+        int sodaQuantity = 0;
+
+        double burritoPrice = 0;
+        double friesPrice = 0;
+        double sodaPrice = 0;
+
+        for (Food food : foodOrder) {
+            if (food.getName().contains("Burrito")) {
+                burritoQuantity += food.getOrderQuantity();
+                burritoPrice = food.getPrice();
+            }
+            else if (food.getName().contains("Fries")) {
+                friesQuantity += food.getOrderQuantity();
+                friesPrice = food.getPrice();
+            }
+            else if (food.getName().contains("Soda")) {
+                sodaQuantity += food.getOrderQuantity();
+                sodaPrice = food.getPrice();
+            }
+            else {
+                System.out.println("One of the entry has error!");
+            }
+        }
+        sendFoodQuantityAndPriceToSales("Burrito", burritoQuantity, (burritoPrice*burritoQuantity));
+        sendFoodQuantityAndPriceToSales("Fries", friesQuantity, (friesPrice*friesQuantity));
+        sendFoodQuantityAndPriceToSales("Soda", sodaQuantity, (sodaPrice*sodaQuantity));
+    }
+
+    private void sendFoodQuantityAndPriceToSales(String foodName, int quantity, double price) {
+        sales.setFoodQuantity(foodName, quantity);
+        sales.setFoodPrice(foodName, price);
     }
 
 }

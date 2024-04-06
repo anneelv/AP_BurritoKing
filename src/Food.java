@@ -8,32 +8,20 @@ abstract public class Food {
     }
 
     //    Getter and Setter for the constructor
-    public void setName(String foodName) {
-        this.name = foodName;
-    }
+    public void setName(String foodName) { this.name = foodName; }
 
-    public String getName() {
-        return this.name;
-    }
+    public String getName() { return this.name; }
 
-    public void setOrderQuantity(int quantity) {
-        this.orderQuantity = quantity;
-    }
+    public void setOrderQuantity(int quantity) { this.orderQuantity = quantity; }
 
-    public int getOrderQuantity() {
-        return this.orderQuantity;
-    }
+    public int getOrderQuantity() { return this.orderQuantity; }
 
     abstract double getPrice();
 
     abstract void setPrice(double newPrice);
 
-    public int getQuantityPerBatch() {
-        return 0;
-    }
+    public int getQuantityPerBatch() { return 0; }
 
-    public int getPrepTime() {
-        return 0;
-    }
-    
+    public int getPrepTime() { return 0; }
+
 }
