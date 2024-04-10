@@ -33,7 +33,7 @@ public class Order {
             System.out.print("Please enter your choice: ");
             choice = input.nextLine();
 
-//			Validating empty input from the user
+//			TODO: EXCEPTION INPUT VALIDATION
             if (choice.isEmpty()) {
                 System.out.printf("Please select a valid menu option. %n");
                 continue;
@@ -76,6 +76,7 @@ public class Order {
             System.out.printf("How many %s would you like to buy: ", food);
             orderInput = input.nextLine();
 
+//            TODO: IMPROVE EXCEPTION
             try {
                 quantity = Integer.parseInt(orderInput);
                 numeric = true;
@@ -108,12 +109,14 @@ public class Order {
         } while (!numeric);
     }
 
+//    TODO: UNIT TEST?
     private void addMenuToArray(Food food, int quantity) {
         foodOrder.add(food);
         totalPrice = totalPrice + food.getPrice() * quantity;
         System.out.printf("%d %s has been successfully added to the order!%n", quantity, food.getName());
     }
 
+    //    TODO: UNIT TEST?
     private void orderMeal(int quantity) {
         burrito.setOrderQuantity(quantity);
         foodOrder.add(burrito);
@@ -142,6 +145,7 @@ public class Order {
             System.out.printf("Total price is $%.2f %n", totalPrice);
     }
 
+//    TODO: EXCEPTION
     private void payOrder() {
         String moneyInput;
         boolean numeric = false;
@@ -165,14 +169,13 @@ public class Order {
         } while (!numeric || !paid);
     }
 
+//    TODO: UNIT TEST
     private boolean moneyChange(double money) {
         if (totalPrice > money) {
-            System.out.println("Sorry that's not enough to pay for order");
-            System.out.println(" ");
+            System.out.printf("Sorry that's not enough to pay for order%n");
             return false;
         } else {
-            System.out.println("Change returned $" + (money - totalPrice));
-            System.out.println(" ");
+            System.out.printf("Change returned $%.2f%n", (money - totalPrice));
             return true;
         }
     }
@@ -216,6 +219,7 @@ public class Order {
         System.out.println("Please wait for " + waitTime + " minutes");
     }
 
+//    TODO: UNIT TEST
     private int burritoCookingTime(int burritoQuantity, int cookedBurritoPerBatch, int burritoPrepTime) {
         int cookingTime = 0;
         double tempTime = 0;
@@ -226,6 +230,7 @@ public class Order {
         return cookingTime;
     }
 
+    //    TODO: UNIT TEST
     private int friesCookingTime(int friesQuantity, int cookedFriesPerBatch, int friesPrepTime) {
         int cookingTime = 0;
         double tempTime = 0;
@@ -237,7 +242,6 @@ public class Order {
             cookingTime = (int) Math.ceil(tempTime) * friesPrepTime;
             remainingFriesQuantity = remainingFriesQuantity + ((cookingTime / 8) * 5) - friesQuantity;
         }
-
         return cookingTime;
     }
 
@@ -259,6 +263,7 @@ public class Order {
         double friesPrice = 0;
         double sodaPrice = 0;
 
+//        TODO: EXCEPTIONS
         for (Food food : foodOrder) {
             if (food.getName().contains("Burrito")) {
                 burritoQuantity += food.getOrderQuantity();
@@ -272,14 +277,12 @@ public class Order {
                 sodaQuantity += food.getOrderQuantity();
                 sodaPrice = food.getPrice();
             }
-            else {
-                System.out.println("One of the entry has error!");
-            }
         }
         sendFoodQuantityAndPriceToSales("Burrito", burritoQuantity, (burritoPrice*burritoQuantity));
         sendFoodQuantityAndPriceToSales("Fries", friesQuantity, (friesPrice*friesQuantity));
         sendFoodQuantityAndPriceToSales("Soda", sodaQuantity, (sodaPrice*sodaQuantity));
     }
+
 
     private void sendFoodQuantityAndPriceToSales(String foodName, int quantity, double price) {
         sales.setFoodQuantity(foodName, quantity);
@@ -293,6 +296,7 @@ public class Order {
     private void changePriceMenu() {
         boolean exit = false;
         String choice;
+//        TODO: EXCEPTION INPUT
         do {
             displayChangePriceMenu();
             System.out.print("Please choose a food to change the price: ");
@@ -318,6 +322,7 @@ public class Order {
                     System.out.printf("%n %n");
                     exit = true;
                     break;
+//              TODO: THROW EXCEPTION
                 default:
                     System.out.printf("%s %n", "The option that you input is invalid!");
                     break;
@@ -325,6 +330,7 @@ public class Order {
         } while (!exit);
     }
 
+//    TODO: UNIT TESTING FOR SET PRICE?
     private void changePrice(String food){
         double newPrice = 0;
         boolean numeric = false;
@@ -359,7 +365,6 @@ public class Order {
             } else {
                 System.out.printf("%s! %n", "Please enter a valid number");
             }
-
 //            Update the prices in the Sales Report
             sales.recalculateTotalSales(food, newPrice);
         } while (!numeric);

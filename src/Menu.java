@@ -22,6 +22,7 @@ public class Menu {
             System.out.print("Please enter your choice: ");
             choice = input.nextLine();
 
+//            TODO: ADD EXCEPTION
 //            TODO: IMPROVE THE INPUT VALIDATION WITH EXCEPTIONS
             if (choice.isEmpty()) {
                 System.out.println("Please select a valid menu option.");
@@ -43,6 +44,7 @@ public class Menu {
                     exit = true;
                     break;
                 default:
+//                    TODO: THROW EXCEPTION
                     System.out.println("The option that you input is invalid!");
                     break;
             }

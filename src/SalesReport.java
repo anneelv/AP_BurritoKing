@@ -1,5 +1,4 @@
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class SalesReport {
@@ -20,11 +19,9 @@ public class SalesReport {
         put("Fries", 0.0);
         put("Soda", 0.0);
     }};
-//    private ArrayList<Food> foodList = new ArrayList<Food>();
     private double totalSales;
     private int leftoverFries = 0;
     private int mealSold = 0;
-//    private int totalFood = 0;
 
     public SalesReport () { }
 
@@ -45,10 +42,6 @@ public class SalesReport {
 
         System.out.printf("%-19s %d %-5s ($%.2f)%n", "Meal Set Discount", mealSold, "qty" ,(mealSold*3.0), "--------------------------------");
         System.out.printf("%-19s %d %-5s $%.2f%n", " ", totalFood, " ", totalSales);
-
-//        System.out.println(FoodMap);
-//        System.out.println(FoodQuantity);
-//        System.out.println(FoodPrice);
     }
 
     public void setLeftoverFries(int friesQuantity) { this.leftoverFries = friesQuantity; }
@@ -57,6 +50,7 @@ public class SalesReport {
 
     public void setTotalMeals(int mealQuantity) { this.mealSold += mealQuantity; }
 
+//    TODO: UNIT TESTING
     public void setFoodQuantity(String key, int quantity) {
         if (FoodQuantity.get(key) > 0){
             int newQty = FoodQuantity.get(key) + quantity;
@@ -67,9 +61,9 @@ public class SalesReport {
         }
     }
 
+//    TODO: UNIT TESTING
 //    The total food price based on the type and number of food ordered
     public void setFoodPrice(String key, double price) {
-//        FoodPrice.put(key, price);
         if (FoodPrice.get(key) > 0){
             double newPrice = FoodPrice.get(key) + price;
             FoodPrice.put(key, newPrice);
@@ -83,17 +77,14 @@ public class SalesReport {
         FoodPrice.put(key, price);
     }
 
+//    TODO: UNIT TESTING
     public void recalculateTotalSales(String key, double price){
         totalSales = 0;
-        System.out.printf("This is the result after recalculating!");
         int foodQuantity = FoodQuantity.get(key);
         double newPrice = foodQuantity*price;
         changeFoodPrice(key, newPrice);
-//        System.out.printf("Quantity: " + FoodQuantity.get(key) + "Price: " + FoodPrice.get(key));
         for (Map.Entry<String, String> entry : FoodMap.entrySet()) {
-            String keys = entry.getKey();
             String value = entry.getValue();
-//            System.out.printf("%-3s %-15s %d %-5s $%.2f %n", keys, value, FoodQuantity.get(value), "qty", FoodPrice.get(value));
             totalSales += FoodPrice.get(value);
         }
         totalSales -= (mealSold*3);
