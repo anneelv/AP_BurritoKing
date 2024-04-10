@@ -7,6 +7,9 @@ public class Order {
     private int mealCount = 0;
     ArrayList<Food> foodOrder = new ArrayList<Food>();
     private SalesReport sales;
+    private Burrito burrito = new Burrito("Burrito");
+    private Fries fries = new Fries("Fries");
+    private Soda soda = new Soda("Soda");
 
     public Order(SalesReport sales) {
         this.sales = sales;
@@ -55,7 +58,6 @@ public class Order {
                     setTotalWaitTime();
                     clearCurrentOrder();
                     System.out.printf("%n %n");
-//                    System.out.println(" ");
                     exit = true;
                     break;
                 default:
@@ -84,15 +86,15 @@ public class Order {
             if (!orderInput.isEmpty() && numeric && quantity > 0) {
                 switch (food) {
                     case "Burrito":
-                        Burrito burrito = new Burrito("Burrito", quantity);
+                        burrito.setOrderQuantity(quantity);
                         addMenuToArray(burrito, quantity);
                         break;
                     case "Fries":
-                        Fries fries = new Fries("Fries", quantity);
+                        fries.setOrderQuantity(quantity);
                         addMenuToArray(fries, quantity);
                         break;
                     case "Soda":
-                        Soda soda = new Soda("Soda", quantity);
+                        soda.setOrderQuantity(quantity);
                         addMenuToArray(soda, quantity);
                         break;
                     case "Meal":
@@ -113,13 +115,13 @@ public class Order {
     }
 
     private void orderMeal(int quantity) {
-        Burrito burrito = new Burrito("Burrito(MS)", quantity);
+        burrito.setOrderQuantity(quantity);
         foodOrder.add(burrito);
 
-        Fries fries = new Fries("Fries(MS)", quantity);
+        fries.setOrderQuantity(quantity);
         foodOrder.add(fries);
 
-        Soda soda = new Soda("Soda(MS)", quantity);
+        soda.setOrderQuantity(quantity);
         foodOrder.add(soda);
         totalPrice = totalPrice + ((burrito.getPrice() * quantity + fries.getPrice() * quantity + soda.getPrice() * quantity) - (3 * quantity));
         mealCount += quantity;
@@ -284,11 +286,15 @@ public class Order {
         sales.setFoodPrice(foodName, price);
     }
 
+    private void displayChangePriceMenu() {
+        System.out.printf("%n %s %n %s %n %s %n %s %n %s %n", "> Select the food item", "1. Burrito", "2. Fries", "3. Soda", "4. No more");
+    }
+
     private void changePriceMenu() {
         boolean exit = false;
         String choice;
         do {
-            displayMenu();
+            displayChangePriceMenu();
             System.out.print("Please choose a food to change the price: ");
             choice = input.nextLine();
 
@@ -301,15 +307,12 @@ public class Order {
             switch (choice) {
                 case "1":
                     changePrice("Burrito");
-//                    addMenu("Burrito");
                     break;
                 case "2":
                     changePrice("Fries");
-//                    addMenu("Fries");
                     break;
                 case "3":
                     changePrice("Soda");
-//                    addMenu("Soda");
                     break;
                 case "4":
                     System.out.printf("%n %n");

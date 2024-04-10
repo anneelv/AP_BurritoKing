@@ -6,11 +6,6 @@ public class Soda extends Food{
         setPrice(2.50);
     }
 
-    public Soda(String name, int orderQuantity) {
-        super(name, orderQuantity);
-        setPrice(2.50);
-    }
-
     //    Getter and Setter for Fries price
     public void setPrice(double newPrice) { price = newPrice; }
     public double getPrice() { return price; }

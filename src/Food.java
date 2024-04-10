@@ -6,11 +6,6 @@ abstract public class Food {
         setName(name);
     }
 
-    public Food(String name, int orderQuantity) {
-        setName(name);
-        setOrderQuantity(orderQuantity);
-    }
-
     //    Getter and Setter for the constructor
     public void setName(String foodName) { this.name = foodName; }
 

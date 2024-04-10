@@ -10,13 +10,6 @@ public class Burrito extends Food{
         quantityPerBatch = 2;
     }
 
-    public Burrito(String name, int orderQuantity) {
-        super(name, orderQuantity);
-        setPrice(7);
-        prepTime = 9;
-        quantityPerBatch = 2;
-    }
-
     //    Getter and Setter for Fries price
     public void setPrice(double newPrice) { price = newPrice; }
 
