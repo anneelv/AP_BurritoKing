@@ -10,13 +10,6 @@ public class Fries extends Food{
         quantityPerBatch = 5;
     }
 
-    public Fries(String name, int orderQuantity) {
-        super(name, orderQuantity);
-        setPrice(4);
-        prepTime = 8;
-        quantityPerBatch = 5;
-    }
-
 //    Getter and Setter for Fries price
     public void setPrice(double newPrice) { price = newPrice; }
 
