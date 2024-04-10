@@ -24,13 +24,15 @@ public class SalesReport {
     private double totalSales;
     private int leftoverFries = 0;
     private int mealSold = 0;
-    private int totalFood = 0;
+//    private int totalFood = 0;
 
     public SalesReport () { }
 
     public void showReport() { reportStruct(); }
 
     private void reportStruct() {
+        int totalFood = 0;
+
         System.out.printf("%s %n%S %n%s %n", "========================================", "sales report", "========================================");
         System.out.printf("%s: %d %n%s:%n", "Unsold Serves of Fries", leftoverFries, "Total Sales");
 
@@ -65,7 +67,9 @@ public class SalesReport {
         }
     }
 
+//    The total food price based on the type and number of food ordered
     public void setFoodPrice(String key, double price) {
+//        FoodPrice.put(key, price);
         if (FoodPrice.get(key) > 0){
             double newPrice = FoodPrice.get(key) + price;
             FoodPrice.put(key, newPrice);
@@ -73,5 +77,25 @@ public class SalesReport {
         else {
             FoodPrice.put(key, price);
         }
+    }
+
+    private void changeFoodPrice(String key, double price){
+        FoodPrice.put(key, price);
+    }
+
+    public void recalculateTotalSales(String key, double price){
+        totalSales = 0;
+        System.out.printf("This is the result after recalculating!");
+        int foodQuantity = FoodQuantity.get(key);
+        double newPrice = foodQuantity*price;
+        changeFoodPrice(key, newPrice);
+//        System.out.printf("Quantity: " + FoodQuantity.get(key) + "Price: " + FoodPrice.get(key));
+        for (Map.Entry<String, String> entry : FoodMap.entrySet()) {
+            String keys = entry.getKey();
+            String value = entry.getValue();
+//            System.out.printf("%-3s %-15s %d %-5s $%.2f %n", keys, value, FoodQuantity.get(value), "qty", FoodPrice.get(value));
+            totalSales += FoodPrice.get(value);
+        }
+        totalSales -= (mealSold*3);
     }
 }

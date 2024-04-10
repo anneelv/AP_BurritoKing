@@ -36,7 +36,7 @@ public class Menu {
 				    sales.showReport();
                     break;
                 case "c":
-//				CREATE UPDATE PRICE CLASS
+				    order.runChangePriceMenu();
                     break;
                 case "d":
                     System.out.println("Bye Bye.");

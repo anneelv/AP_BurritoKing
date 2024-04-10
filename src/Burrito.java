@@ -3,6 +3,13 @@ public class Burrito extends Food{
     private final int prepTime;
     private final int quantityPerBatch;
 
+    public Burrito(String name){
+        super(name);
+        setPrice(7);
+        prepTime = 9;
+        quantityPerBatch = 2;
+    }
+
     public Burrito(String name, int orderQuantity) {
         super(name, orderQuantity);
         setPrice(7);

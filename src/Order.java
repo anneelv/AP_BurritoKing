@@ -16,6 +16,8 @@ public class Order {
         mainOrder();
     }
 
+    public void runChangePriceMenu() { changePriceMenu(); }
+
     private void displayMenu() {
         System.out.printf("%n %s %n %s %n %s %n %s %n %s %n %s %n", "> Select the food item", "1. Burrito", "2. Fries", "3. Soda", "4. Meal (1 Burrito, 1 Fries, and 1 Soda)", "5. No more");
     }
@@ -280,6 +282,84 @@ public class Order {
     private void sendFoodQuantityAndPriceToSales(String foodName, int quantity, double price) {
         sales.setFoodQuantity(foodName, quantity);
         sales.setFoodPrice(foodName, price);
+    }
+
+    private void changePriceMenu() {
+        boolean exit = false;
+        String choice;
+        do {
+            displayMenu();
+            System.out.print("Please choose a food to change the price: ");
+            choice = input.nextLine();
+
+//			Validating empty input from the user
+            if (choice.isEmpty()) {
+                System.out.printf("Please select a valid menu option. %n");
+                continue;
+            }
+
+            switch (choice) {
+                case "1":
+                    changePrice("Burrito");
+//                    addMenu("Burrito");
+                    break;
+                case "2":
+                    changePrice("Fries");
+//                    addMenu("Fries");
+                    break;
+                case "3":
+                    changePrice("Soda");
+//                    addMenu("Soda");
+                    break;
+                case "4":
+                    System.out.printf("%n %n");
+                    exit = true;
+                    break;
+                default:
+                    System.out.printf("%s %n", "The option that you input is invalid!");
+                    break;
+            }
+        } while (!exit);
+    }
+
+    private void changePrice(String food){
+        double newPrice = 0;
+        boolean numeric = false;
+        String priceInput;
+//TODO: IMPLEMENT MORE TRY CATCH
+        do {
+            System.out.printf("Please input the new price for %s: ", food);
+            priceInput = input.nextLine();
+
+            try {
+                newPrice = Double.parseDouble(priceInput);
+                numeric = true;
+            } catch (NumberFormatException ignored) {
+
+            }
+
+            if (!priceInput.isEmpty() && numeric && newPrice > 0) {
+                switch (food) {
+                    case "Burrito":
+                        Burrito burrito = new Burrito("Burrito");
+                        burrito.setPrice(newPrice);
+                        break;
+                    case "Fries":
+                        Fries fries = new Fries("Fries");
+                        fries.setPrice(newPrice);
+                        break;
+                    case "Soda":
+                        Soda soda = new Soda("Soda");
+                        soda.setPrice(newPrice);
+                        break;
+                }
+            } else {
+                System.out.printf("%s! %n", "Please enter a valid number");
+            }
+
+//            Update the prices in the Sales Report
+            sales.recalculateTotalSales(food, newPrice);
+        } while (!numeric);
     }
 
 }
