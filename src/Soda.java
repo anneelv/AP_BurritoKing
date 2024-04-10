@@ -1,6 +1,11 @@
 public class Soda extends Food{
     private static double price;
 
+    public Soda(String name){
+        super(name);
+        setPrice(2.50);
+    }
+
     public Soda(String name, int orderQuantity) {
         super(name, orderQuantity);
         setPrice(2.50);

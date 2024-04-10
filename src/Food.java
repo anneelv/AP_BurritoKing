@@ -2,6 +2,10 @@ abstract public class Food {
     private String name;
     private int orderQuantity;
 
+    public Food(String name) {
+        setName(name);
+    }
+
     public Food(String name, int orderQuantity) {
         setName(name);
         setOrderQuantity(orderQuantity);

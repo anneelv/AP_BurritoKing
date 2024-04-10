@@ -3,6 +3,13 @@ public class Fries extends Food{
     private final int prepTime;
     private final int quantityPerBatch;
 
+    public Fries(String name){
+        super(name);
+        setPrice(4);
+        prepTime = 8;
+        quantityPerBatch = 5;
+    }
+
     public Fries(String name, int orderQuantity) {
         super(name, orderQuantity);
         setPrice(4);
