@@ -6,47 +6,45 @@ public class Menu {
     private boolean exit = false;
     private Order order;
     private SalesReport sales;
+    private Validation validation;
 
-    public Menu(Order order, SalesReport sales) {
+    public Menu(Order order, SalesReport sales, Validation validation) {
         this.order = order;
         this.sales = sales;
+        this.validation = validation;
     }
 
-    public void run(){
+    public void run() throws InvalidOptionException, EmptyUserInputException {
         mainMenu();
     }
 
-    private void mainMenu() {
+    private void mainMenu() throws InvalidOptionException, EmptyUserInputException{
         do{
             displayMenu();
             System.out.print("Please enter your choice: ");
-            choice = input.nextLine();
+            try {
+                choice = input.nextLine();
+                validation.checkStringInput(choice);
 
-//            TODO: ADD EXCEPTION
-//            TODO: IMPROVE THE INPUT VALIDATION WITH EXCEPTIONS
-            if (choice.isEmpty()) {
-                System.out.println("Please select a valid menu option.");
-                continue;
-            }
-
-            switch (choice) {
-                case "a":
-                    order.runMenu();
-                    break;
-                case "b":
-				    sales.showReport();
-                    break;
-                case "c":
-				    order.runChangePriceMenu();
-                    break;
-                case "d":
-                    System.out.println("Bye Bye.");
-                    exit = true;
-                    break;
-                default:
-//                    TODO: THROW EXCEPTION
-                    System.out.println("The option that you input is invalid!");
-                    break;
+                switch (choice) {
+                    case "a":
+                        order.runMenu();
+                        break;
+                    case "b":
+                        sales.showReport();
+                        break;
+                    case "c":
+                        order.runChangePriceMenu();
+                        break;
+                    case "d":
+                        System.out.println("Bye Bye.");
+                        exit = true;
+                        break;
+                    default:
+                        throw new InvalidOptionException("The option that you input is invalid!");
+                }
+            } catch (InvalidOptionException | EmptyUserInputException e) {
+                System.out.println(e.getMessage());
             }
         } while (!exit);
     }

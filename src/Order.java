@@ -7,17 +7,17 @@ public class Order {
     private int mealCount = 0;
     ArrayList<Food> foodOrder = new ArrayList<Food>();
     private SalesReport sales;
+    private Validation validation;
     private Burrito burrito = new Burrito("Burrito");
     private Fries fries = new Fries("Fries");
     private Soda soda = new Soda("Soda");
 
-    public Order(SalesReport sales) {
+    public Order(SalesReport sales, Validation validation) {
         this.sales = sales;
+        this.validation = validation;
     }
 
-    public void runMenu() {
-        mainOrder();
-    }
+    public void runMenu() throws InvalidOptionException, EmptyUserInputException { mainOrder(); }
 
     public void runChangePriceMenu() { changePriceMenu(); }
 
@@ -25,88 +25,88 @@ public class Order {
         System.out.printf("%n %s %n %s %n %s %n %s %n %s %n %s %n", "> Select the food item", "1. Burrito", "2. Fries", "3. Soda", "4. Meal (1 Burrito, 1 Fries, and 1 Soda)", "5. No more");
     }
 
-    private void mainOrder() {
+    private void mainOrder() throws InvalidOptionException, EmptyUserInputException {
         boolean exit = false;
         String choice;
         do {
             displayMenu();
             System.out.print("Please enter your choice: ");
-            choice = input.nextLine();
+            try{
+                choice = input.nextLine();
+                validation.checkStringInput(choice);
 
-//			TODO: EXCEPTION INPUT VALIDATION
-            if (choice.isEmpty()) {
-                System.out.printf("Please select a valid menu option. %n");
-                continue;
-            }
-
-            switch (choice) {
-                case "1":
-                    addMenu("Burrito");
-                    break;
-                case "2":
-                    addMenu("Fries");
-                    break;
-                case "3":
-                    addMenu("Soda");
-                    break;
-                case "4":
-                    addMenu("Meal");
-                    break;
-                case "5":
-                    getFinalOrder();
-                    payOrder();
-                    setTotalWaitTime();
-                    clearCurrentOrder();
-                    System.out.printf("%n %n");
-                    exit = true;
-                    break;
-                default:
-                    System.out.printf("%s %n", "The option that you input is invalid!");
-                    break;
+                switch (choice) {
+                    case "1":
+                        addMenu("Burrito");
+                        break;
+                    case "2":
+                        addMenu("Fries");
+                        break;
+                    case "3":
+                        addMenu("Soda");
+                        break;
+                    case "4":
+                        addMenu("Meal");
+                        break;
+                    case "5":
+                        getFinalOrder();
+                        payOrder();
+                        setTotalWaitTime();
+                        clearCurrentOrder();
+                        System.out.printf("%n %n");
+                        exit = true;
+                        break;
+                    default:
+                        throw new InvalidOptionException("The option that you input is invalid!");
+                }
+            } catch (EmptyUserInputException | InvalidOptionException e) {
+                System.out.println(e.getMessage());
             }
         } while (!exit);
     }
 
-    private void addMenu(String food) {
+    private void addMenu(String food) throws NotANumberException {
         int quantity = 0;
         boolean numeric = false;
+        boolean added = false;
         String orderInput;
 
         do {
             System.out.printf("How many %s would you like to buy: ", food);
-            orderInput = input.nextLine();
-
-//            TODO: IMPROVE EXCEPTION
             try {
+                orderInput = input.nextLine();
+                validation.checkStringInput(orderInput);
                 quantity = Integer.parseInt(orderInput);
                 numeric = true;
-            } catch (NumberFormatException ignored) {
+                validation.checkNumberInput(quantity);
 
-            }
-
-            if (!orderInput.isEmpty() && numeric && quantity > 0) {
                 switch (food) {
                     case "Burrito":
                         burrito.setOrderQuantity(quantity);
                         addMenuToArray(burrito, quantity);
+                        added = true;
                         break;
                     case "Fries":
                         fries.setOrderQuantity(quantity);
                         addMenuToArray(fries, quantity);
+                        added = true;
                         break;
                     case "Soda":
                         soda.setOrderQuantity(quantity);
                         addMenuToArray(soda, quantity);
+                        added = true;
                         break;
                     case "Meal":
                         orderMeal(quantity);
+                        added = true;
                         break;
                 }
-            } else {
-                System.out.printf("%s! %n", "Please enter a valid number");
+            } catch (NotANumberException | EmptyUserInputException e) {
+                System.out.println(e.getMessage());
+            } catch (NumberFormatException e) {
+                System.out.println("Please input a number!");
             }
-
-        } while (!numeric);
+        } while (!numeric || !added);
     }
 
 //    TODO: UNIT TEST?
@@ -145,7 +145,6 @@ public class Order {
             System.out.printf("Total price is $%.2f %n", totalPrice);
     }
 
-//    TODO: EXCEPTION
     private void payOrder() {
         String moneyInput;
         boolean numeric = false;
@@ -154,18 +153,18 @@ public class Order {
 
         do {
             System.out.print("Please enter money: ");
-            moneyInput = input.nextLine();
             try {
+                moneyInput = input.nextLine();
+                validation.checkStringInput(moneyInput);
                 money = Double.parseDouble(moneyInput);
+                validation.checkNumberInput(money);
                 numeric = true;
-            } catch (NumberFormatException e) {
-                numeric = false;
-            }
-
-            if (!moneyInput.isEmpty() && numeric) {
                 paid = moneyChange(money);
+            } catch (NotANumberException | EmptyUserInputException e) {
+                System.out.println(e.getMessage());
+            } catch (NumberFormatException e) {
+                System.out.println("Please input a number!");
             }
-
         } while (!numeric || !paid);
     }
 
@@ -263,7 +262,6 @@ public class Order {
         double friesPrice = 0;
         double sodaPrice = 0;
 
-//        TODO: EXCEPTIONS
         for (Food food : foodOrder) {
             if (food.getName().contains("Burrito")) {
                 burritoQuantity += food.getOrderQuantity();
@@ -296,36 +294,32 @@ public class Order {
     private void changePriceMenu() {
         boolean exit = false;
         String choice;
-//        TODO: EXCEPTION INPUT
         do {
             displayChangePriceMenu();
             System.out.print("Please choose a food to change the price: ");
-            choice = input.nextLine();
+            try {
+                choice = input.nextLine();
+                validation.checkStringInput(choice);
 
-//			Validating empty input from the user
-            if (choice.isEmpty()) {
-                System.out.printf("Please select a valid menu option. %n");
-                continue;
-            }
-
-            switch (choice) {
-                case "1":
-                    changePrice("Burrito");
-                    break;
-                case "2":
-                    changePrice("Fries");
-                    break;
-                case "3":
-                    changePrice("Soda");
-                    break;
-                case "4":
-                    System.out.printf("%n %n");
-                    exit = true;
-                    break;
-//              TODO: THROW EXCEPTION
-                default:
-                    System.out.printf("%s %n", "The option that you input is invalid!");
-                    break;
+                switch (choice) {
+                    case "1":
+                        changePrice("Burrito");
+                        break;
+                    case "2":
+                        changePrice("Fries");
+                        break;
+                    case "3":
+                        changePrice("Soda");
+                        break;
+                    case "4":
+                        System.out.printf("%n %n");
+                        exit = true;
+                        break;
+                    default:
+                        throw new InvalidOptionException("The option that you input is invalid!");
+                }
+            } catch (NotANumberException | EmptyUserInputException | InvalidOptionException e){
+                System.out.println(e.getMessage());
             }
         } while (!exit);
     }
@@ -334,40 +328,42 @@ public class Order {
     private void changePrice(String food){
         double newPrice = 0;
         boolean numeric = false;
+        boolean priceChanged = false;
         String priceInput;
-//TODO: IMPLEMENT MORE TRY CATCH
         do {
             System.out.printf("Please input the new price for %s: ", food);
-            priceInput = input.nextLine();
-
             try {
+                priceInput = input.nextLine();
+                validation.checkStringInput(priceInput);
                 newPrice = Double.parseDouble(priceInput);
+                validation.checkNumberInput(priceInput);
                 numeric = true;
-            } catch (NumberFormatException ignored) {
 
-            }
-
-            if (!priceInput.isEmpty() && numeric && newPrice > 0) {
                 switch (food) {
                     case "Burrito":
                         Burrito burrito = new Burrito("Burrito");
                         burrito.setPrice(newPrice);
+                        priceChanged = true;
                         break;
                     case "Fries":
                         Fries fries = new Fries("Fries");
                         fries.setPrice(newPrice);
+                        priceChanged = true;
                         break;
                     case "Soda":
                         Soda soda = new Soda("Soda");
                         soda.setPrice(newPrice);
+                        priceChanged = true;
                         break;
                 }
-            } else {
-                System.out.printf("%s! %n", "Please enter a valid number");
-            }
-//            Update the prices in the Sales Report
-            sales.recalculateTotalSales(food, newPrice);
-        } while (!numeric);
-    }
 
+                // Update the prices in the Sales Report
+                sales.recalculateTotalSales(food, newPrice);
+            } catch (NotANumberException | EmptyUserInputException e) {
+                System.out.println(e.getMessage());
+            } catch (NumberFormatException e) {
+                System.out.println("Please input a number!");
+            }
+        } while (!numeric || !priceChanged);
+    }
 }
