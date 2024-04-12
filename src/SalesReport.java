@@ -47,6 +47,7 @@ public class SalesReport {
     public void setLeftoverFries(int friesQuantity) { this.leftoverFries = friesQuantity; }
 
     public void setTotalSales(double salesPrice) { totalSales += salesPrice; }
+    public double getTotalSales() { return totalSales; }
 
     public void setTotalMeals(int mealQuantity) { this.mealSold += mealQuantity; }
 
@@ -75,11 +76,10 @@ public class SalesReport {
         }
     }
 
-    private void changeFoodPrice(String key, double price){
+    public void changeFoodPrice(String key, double price){
         FoodPrice.put(key, price);
     }
 
-//    TODO: UNIT TESTING
     public void recalculateTotalSales(String key, double price){
         totalSales = 0;
         int foodQuantity = FoodQuantity.get(key);

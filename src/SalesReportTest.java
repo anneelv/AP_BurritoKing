@@ -41,17 +41,48 @@ public class SalesReportTest {
 
     @Test
     public void testRecalculateTotalSalesForNewBurritoPrice() {
+        sales.setFoodQuantity("Burrito", 3);
+        sales.setFoodPrice("Burrito", 7);
+        sales.setTotalSales(21);
+        sales.recalculateTotalSales("Burrito", 5);
+
+        assertEquals(15, sales.getTotalSales(), 0.01);
 
     }
 
     @Test
     public void testRecalculateTotalSalesWhenTheresSalesAlready() {
+        sales.setFoodQuantity("Burrito", 3);
+        sales.setFoodPrice("Burrito", 21);
+        sales.setFoodQuantity("Fries", 3);
+        sales.setFoodPrice("Fries", 12);
+        sales.setFoodQuantity("Soda", 3);
+        sales.setFoodPrice("Soda", 7.5);
+        sales.setTotalSales(40.5);
+        sales.recalculateTotalSales("Burrito", 5);
 
+        assertEquals(34.5, sales.getTotalSales(), 0.01);
+    }
+
+    @Test
+    public void testRecalculateTotalSalesWhenTheresMeals() {
+        sales.setFoodQuantity("Burrito", 3);
+        sales.setFoodPrice("Burrito", 21);
+        sales.setFoodQuantity("Fries", 3);
+        sales.setFoodPrice("Fries", 12);
+        sales.setFoodQuantity("Soda", 3);
+        sales.setFoodPrice("Soda", 7.5);
+        sales.setTotalMeals(2);
+        sales.setTotalSales(34.5);
+        sales.recalculateTotalSales("Burrito", 5);
+
+        assertEquals(28.5, sales.getTotalSales(), 0.01);
     }
 
     @After
     public void tearDown() throws Exception {
         sales.setFoodPrice("Burrito", 0);
         sales.setFoodQuantity("Burrito",0);
+        sales.setTotalMeals(0);
     }
 }
