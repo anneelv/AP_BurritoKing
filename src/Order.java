@@ -8,13 +8,16 @@ public class Order {
     ArrayList<Food> foodOrder = new ArrayList<Food>();
     private SalesReport sales;
     private Validation validation;
-    private Burrito burrito = new Burrito("Burrito");
-    private Fries fries = new Fries("Fries");
-    private Soda soda = new Soda("Soda");
+    private Burrito burrito;
+    private Fries fries;
+    private Soda soda;
 
     public Order(SalesReport sales, Validation validation) {
         this.sales = sales;
         this.validation = validation;
+        burrito = new Burrito("Burrito");
+        fries = new Fries("Fries");
+        soda = new Soda("Soda");
     }
 
     public void runMenu() throws InvalidOptionException, EmptyUserInputException { mainOrder(); }
@@ -225,7 +228,6 @@ public class Order {
             waitTime = burritoTime;
         else
             waitTime = friesTime;
-
         return waitTime;
     }
 
@@ -266,7 +268,7 @@ public class Order {
         return remainingFriesQuantity;
     }
 
-//    Send the details of curren order to SalesReport and
+//    Send the details of current order to SalesReport and
 //    Reset current order to empty and zero for the next order
     private void clearCurrentOrder() {
         sales.setLeftoverFries(remainingFriesQuantity);

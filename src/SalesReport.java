@@ -50,7 +50,10 @@ public class SalesReport {
 
     public void setTotalMeals(int mealQuantity) { this.mealSold += mealQuantity; }
 
-//    TODO: UNIT TESTING
+    public int getFoodQuantity(String key) { return FoodQuantity.get(key); }
+
+    public double getFoodPrice(String key) { return FoodPrice.get(key); }
+
     public void setFoodQuantity(String key, int quantity) {
         if (FoodQuantity.get(key) > 0){
             int newQty = FoodQuantity.get(key) + quantity;
@@ -61,7 +64,6 @@ public class SalesReport {
         }
     }
 
-//    TODO: UNIT TESTING
 //    The total food price based on the type and number of food ordered
     public void setFoodPrice(String key, double price) {
         if (FoodPrice.get(key) > 0){
