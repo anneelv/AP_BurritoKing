@@ -25,7 +25,7 @@ public class Order {
         System.out.printf("%n %s %n %s %n %s %n %s %n %s %n %s %n", "> Select the food item", "1. Burrito", "2. Fries", "3. Soda", "4. Meal (1 Burrito, 1 Fries, and 1 Soda)", "5. No more");
     }
 
-    private void mainOrder() throws InvalidOptionException, EmptyUserInputException {
+    public void mainOrder() throws InvalidOptionException, EmptyUserInputException {
         boolean exit = false;
         String choice;
         do {
@@ -65,7 +65,7 @@ public class Order {
         } while (!exit);
     }
 
-    private void addMenu(String food) throws NotANumberException {
+    public void addMenu(String food) throws NotANumberException {
         int quantity = 0;
         boolean numeric = false;
         boolean added = false;
@@ -82,17 +82,17 @@ public class Order {
 
                 switch (food) {
                     case "Burrito":
-                        burrito.setOrderQuantity(quantity);
+                        burrito.setOrderQuantity(burrito.getOrderQuantity() + quantity);
                         addMenuToArray(burrito, quantity);
                         added = true;
                         break;
                     case "Fries":
-                        fries.setOrderQuantity(quantity);
+                        fries.setOrderQuantity(fries.getOrderQuantity() +quantity);
                         addMenuToArray(fries, quantity);
                         added = true;
                         break;
                     case "Soda":
-                        soda.setOrderQuantity(quantity);
+                        soda.setOrderQuantity(soda.getOrderQuantity() +quantity);
                         addMenuToArray(soda, quantity);
                         added = true;
                         break;
@@ -110,29 +110,26 @@ public class Order {
     }
 
 //    TODO: UNIT TEST?
-    private void addMenuToArray(Food food, int quantity) {
+    public void addMenuToArray(Food food, int quantity) {
         foodOrder.add(food);
-        totalPrice = totalPrice + food.getPrice() * quantity;
+        setTotalPrice(getTotalPrice() + food.getPrice() * quantity);
+//        totalPrice = totalPrice + food.getPrice() * quantity;
         System.out.printf("%d %s has been successfully added to the order!%n", quantity, food.getName());
     }
 
-    //    TODO: UNIT TEST?
-    private void orderMeal(int quantity) {
-        burrito.setOrderQuantity(quantity);
-        foodOrder.add(burrito);
+    public void orderMeal(int quantity) {
+        burrito.setOrderQuantity(burrito.getOrderQuantity() + quantity);
+        fries.setOrderQuantity(fries.getOrderQuantity() +quantity);
+        soda.setOrderQuantity(soda.getOrderQuantity() +quantity);
 
-        fries.setOrderQuantity(quantity);
-        foodOrder.add(fries);
-
-        soda.setOrderQuantity(quantity);
-        foodOrder.add(soda);
-        totalPrice = totalPrice + ((burrito.getPrice() * quantity + fries.getPrice() * quantity + soda.getPrice() * quantity) - (3 * quantity));
+        setTotalPrice(getTotalPrice() + ((burrito.getPrice() * quantity + fries.getPrice() * quantity + soda.getPrice() * quantity) - (3 * quantity)));
+//        totalPrice = totalPrice + ((burrito.getPrice() * quantity + fries.getPrice() * quantity + soda.getPrice() * quantity) - (3 * quantity));
         mealCount += quantity;
         sales.setTotalMeals(quantity);
         System.out.printf("%d Meal Set has been successfully added to the order! %n", quantity);
     }
 
-    private void getFinalOrder() {
+    public void getFinalOrder() {
         System.out.println("Currently you have:");
         for (Food food : foodOrder) {
             System.out.printf("+ %-15s", food.getName());
@@ -140,9 +137,9 @@ public class Order {
             System.out.printf("@%.2f %n", food.getPrice());
         }
         if (mealCount > 0)
-            System.out.printf("Total price is $%.2f, you get discount for ordering %d Meal Set %n", totalPrice, mealCount);
+            System.out.printf("Total price is $%.2f, you get discount for ordering %d Meal Set %n", getTotalPrice(), mealCount);
         else
-            System.out.printf("Total price is $%.2f %n", totalPrice);
+            System.out.printf("Total price is $%.2f %n", getTotalPrice());
     }
 
     private void payOrder() {
@@ -168,15 +165,22 @@ public class Order {
         } while (!numeric || !paid);
     }
 
-//    TODO: UNIT TEST
-    private boolean moneyChange(double money) {
-        if (totalPrice > money) {
+    public boolean moneyChange(double money) {
+        if (getTotalPrice() > money) {
             System.out.printf("Sorry that's not enough to pay for order%n");
             return false;
         } else {
-            System.out.printf("Change returned $%.2f%n", (money - totalPrice));
+            System.out.printf("Change returned $%.2f%n", (money - getTotalPrice()));
             return true;
         }
+    }
+
+    public void setTotalPrice(double price) {
+        this.totalPrice = price;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
     }
 
     private void setTotalWaitTime() {
@@ -209,17 +213,23 @@ public class Order {
         burritoTime = burritoCookingTime(burritoQuantity, cookedBurritoPerBatch, burritoPrepTime);
         friesTime = friesCookingTime(friesQuantity, cookedFriesPerBatch, friesPrepTime);
 
+        waitTime = calculateWaitingTime(burritoTime, friesTime);
+
+        System.out.printf("There are %d serve(s) of Fries left for next %n", remainingFriesQuantity);
+        System.out.printf("Please wait for %d minutes", waitTime);
+    }
+
+    public int calculateWaitingTime(int burritoTime, int friesTime) {
+        int waitTime = 0;
         if (burritoTime > friesTime)
             waitTime = burritoTime;
         else
             waitTime = friesTime;
 
-        System.out.println("There are " + remainingFriesQuantity + " serve(s) of Fries left for next order");
-        System.out.println("Please wait for " + waitTime + " minutes");
+        return waitTime;
     }
 
-//    TODO: UNIT TEST
-    private int burritoCookingTime(int burritoQuantity, int cookedBurritoPerBatch, int burritoPrepTime) {
+    public int burritoCookingTime(int burritoQuantity, int cookedBurritoPerBatch, int burritoPrepTime) {
         int cookingTime = 0;
         double tempTime = 0;
 
@@ -229,26 +239,43 @@ public class Order {
         return cookingTime;
     }
 
-    //    TODO: UNIT TEST
-    private int friesCookingTime(int friesQuantity, int cookedFriesPerBatch, int friesPrepTime) {
+    public int friesCookingTime(int friesQuantity, int cookedFriesPerBatch, int friesPrepTime) {
         int cookingTime = 0;
         double tempTime = 0;
+        int tempRemainingFriesQuantity = getRemainingFriesQuantity();
+        int friesNeeded = 0;
 
-        if (remainingFriesQuantity >= friesQuantity) {
-            remainingFriesQuantity = remainingFriesQuantity - friesQuantity;
+        if (tempRemainingFriesQuantity >= friesQuantity) {
+            tempRemainingFriesQuantity = tempRemainingFriesQuantity - friesQuantity;
+            setRemainingFriesQuantity(tempRemainingFriesQuantity);
         } else {
-            tempTime = (double) friesQuantity / (double) cookedFriesPerBatch;
+            friesNeeded = friesQuantity - tempRemainingFriesQuantity;
+            tempTime = (double) friesNeeded / (double) cookedFriesPerBatch;
             cookingTime = (int) Math.ceil(tempTime) * friesPrepTime;
-            remainingFriesQuantity = remainingFriesQuantity + ((cookingTime / 8) * 5) - friesQuantity;
+            tempRemainingFriesQuantity = tempRemainingFriesQuantity + ((cookingTime / 8) * 5) - friesQuantity;
+            setRemainingFriesQuantity(tempRemainingFriesQuantity);
         }
         return cookingTime;
     }
 
+    public void setRemainingFriesQuantity(int remaining){
+        remainingFriesQuantity = remaining;
+    }
+
+    public int getRemainingFriesQuantity() {
+        return remainingFriesQuantity;
+    }
+
+//    Send the details of curren order to SalesReport and
+//    Reset current order to empty and zero for the next order
     private void clearCurrentOrder() {
         sales.setLeftoverFries(remainingFriesQuantity);
         sales.setTotalSales(totalPrice);
         setupInfoForSales();
         foodOrder.clear();
+        burrito.setOrderQuantity(0);
+        fries.setOrderQuantity(0);
+        soda.setOrderQuantity(0);
         totalPrice = 0;
         mealCount = 0;
     }
@@ -324,7 +351,6 @@ public class Order {
         } while (!exit);
     }
 
-//    TODO: UNIT TESTING FOR SET PRICE?
     private void changePrice(String food){
         double newPrice = 0;
         boolean numeric = false;

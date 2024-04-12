@@ -1,6 +1,6 @@
 public class Validation {
 
-    public <T> void checkNumberInput(T input) throws NotANumberException{
+    public <T> Object checkNumberInput(T input) throws NotANumberException{
         if (input instanceof Integer) {
             if ((int)input < 1) {
                 throw new NotANumberException();
@@ -9,12 +9,16 @@ public class Validation {
             if ((double)input < 1) {
                 throw new NotANumberException();
             }
+        } else if (!(input instanceof Integer) && !(input instanceof Double)) {
+            throw new NotANumberException();
         }
+        return null;
     }
 
-    public void checkStringInput(String input) throws EmptyUserInputException{
+    public Object checkStringInput(String input) throws EmptyUserInputException{
         if (input.isEmpty()) {
             throw new EmptyUserInputException("Input must not be empty!");
         }
+        return null;
     }
 }
