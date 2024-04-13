@@ -1,7 +1,13 @@
+package MainProgram;
+
 import java.util.*;
+import Exceptions.*;
+
+/*The Order class handles food ordering, cooking time, remaining fries serves,
+* order payment, and also price change for foods. These orders will be working
+* closely with the SalesReport to track each customer order*/
 
 public class Order {
-    private Scanner input = new Scanner(System.in);
     private double totalPrice = 0;
     private static int remainingFriesQuantity = 0;
     private int mealCount = 0;
@@ -20,14 +26,18 @@ public class Order {
         soda = new Soda("Soda");
     }
 
+    /*The method to run the food ordering program*/
     public void runMenu() throws InvalidOptionException, EmptyUserInputException { mainOrder(); }
 
+    /*The method to run changing prices of food*/
     public void runChangePriceMenu() { changePriceMenu(); }
 
+    /*The method to display constant initial menu options lines*/
     private void displayMenu() {
         System.out.printf("%n %s %n %s %n %s %n %s %n %s %n %s %n", "> Select the food item", "1. Burrito", "2. Fries", "3. Soda", "4. Meal (1 Burrito, 1 Fries, and 1 Soda)", "5. No more");
     }
 
+    /*The method to keep the Order option ongoing based on user input*/
     public void mainOrder() throws InvalidOptionException, EmptyUserInputException {
         boolean exit = false;
         String choice;
@@ -35,7 +45,9 @@ public class Order {
             displayMenu();
             System.out.print("Please enter your choice: ");
             try{
-                choice = input.nextLine();
+                choice = readUserInput();
+
+                // Validating user input and continue with the loop if the input is empty
                 validation.checkStringInput(choice);
 
                 switch (choice) {
@@ -68,6 +80,7 @@ public class Order {
         } while (!exit);
     }
 
+    /*The method to set up the quantity of food ordered*/
     public void addMenu(String food) throws NotANumberException {
         int quantity = 0;
         boolean numeric = false;
@@ -77,10 +90,17 @@ public class Order {
         do {
             System.out.printf("How many %s would you like to buy: ", food);
             try {
-                orderInput = input.nextLine();
+                orderInput = readUserInput();
+
+                // Validating user input and continue with the loop if the input is empty
                 validation.checkStringInput(orderInput);
+
+                // Validating user input and continue with the loop
+                // if the input is not an integer number
                 quantity = Integer.parseInt(orderInput);
                 numeric = true;
+
+                // Validating user input and continue with the loop if the input is not a valid number
                 validation.checkNumberInput(quantity);
 
                 switch (food) {
@@ -112,26 +132,38 @@ public class Order {
         } while (!numeric || !added);
     }
 
-//    TODO: UNIT TEST?
+    /*The method to add a food to the current order array list*/
     public void addMenuToArray(Food food, int quantity) {
         foodOrder.add(food);
         setTotalPrice(getTotalPrice() + food.getPrice() * quantity);
-//        totalPrice = totalPrice + food.getPrice() * quantity;
         System.out.printf("%d %s has been successfully added to the order!%n", quantity, food.getName());
     }
 
+    /*The method to order a set of meal*/
     public void orderMeal(int quantity) {
         burrito.setOrderQuantity(burrito.getOrderQuantity() + quantity);
         fries.setOrderQuantity(fries.getOrderQuantity() +quantity);
         soda.setOrderQuantity(soda.getOrderQuantity() +quantity);
 
+        // Add the food to the order array list if it's not inside the list yet
+        if(!(foodOrder.contains(burrito))) {
+            foodOrder.add(burrito);
+        }
+        if (!(foodOrder.contains(fries))) {
+            foodOrder.add(fries);
+        }
+        if (!(foodOrder.contains(soda))) {
+            foodOrder.add(soda);
+        }
+
         setTotalPrice(getTotalPrice() + ((burrito.getPrice() * quantity + fries.getPrice() * quantity + soda.getPrice() * quantity) - (3 * quantity)));
-//        totalPrice = totalPrice + ((burrito.getPrice() * quantity + fries.getPrice() * quantity + soda.getPrice() * quantity) - (3 * quantity));
         mealCount += quantity;
         sales.setTotalMeals(quantity);
         System.out.printf("%d Meal Set has been successfully added to the order! %n", quantity);
     }
 
+
+    /*The method to organize the display to show ordered food*/
     public void getFinalOrder() {
         System.out.println("Currently you have:");
         for (Food food : foodOrder) {
@@ -139,12 +171,15 @@ public class Order {
             System.out.printf("%s %-5s", food.getOrderQuantity(), "qty");
             System.out.printf("@%.2f %n", food.getPrice());
         }
+
+        // Display a different line based on the number of Meal set ordered
         if (mealCount > 0)
             System.out.printf("Total price is $%.2f, you get discount for ordering %d Meal Set %n", getTotalPrice(), mealCount);
         else
             System.out.printf("Total price is $%.2f %n", getTotalPrice());
     }
 
+    /*The method to handle the money input from user to pay the order*/
     private void payOrder() {
         String moneyInput;
         boolean numeric = false;
@@ -154,11 +189,19 @@ public class Order {
         do {
             System.out.print("Please enter money: ");
             try {
-                moneyInput = input.nextLine();
+                moneyInput = readUserInput();
+
+                // Validating user input and continue with the loop if the input is empty
                 validation.checkStringInput(moneyInput);
+
+                // Validating user input and continue with the loop
+                // if the input is not an integer number
                 money = Double.parseDouble(moneyInput);
-                validation.checkNumberInput(money);
                 numeric = true;
+
+                // Validating user input and continue with the loop if the input is not a valid number
+                validation.checkNumberInput(money);
+
                 paid = moneyChange(money);
             } catch (NotANumberException | EmptyUserInputException e) {
                 System.out.println(e.getMessage());
@@ -168,6 +211,7 @@ public class Order {
         } while (!numeric || !paid);
     }
 
+    /*The method to handle any change needed for the user*/
     public boolean moneyChange(double money) {
         if (getTotalPrice() > money) {
             System.out.printf("Sorry that's not enough to pay for order%n");
@@ -186,6 +230,7 @@ public class Order {
         return totalPrice;
     }
 
+    /*The method to set user waiting time*/
     private void setTotalWaitTime() {
         int waitTime = 0;
 
@@ -199,7 +244,7 @@ public class Order {
         int friesPrepTime = 0;
         int friesQuantity = 0;
 
-//		Counting total burrito and fries ordered
+        // Looping through the array list to get the number of food ordered
         for (Food food : foodOrder) {
             if (food.getName().contains("Burrito")) {
                 burritoQuantity = burritoQuantity + food.getOrderQuantity();
@@ -213,15 +258,16 @@ public class Order {
             }
         }
 
+        // Getting the cooking time for each food (burrito and fries)
         burritoTime = burritoCookingTime(burritoQuantity, cookedBurritoPerBatch, burritoPrepTime);
         friesTime = friesCookingTime(friesQuantity, cookedFriesPerBatch, friesPrepTime);
-
         waitTime = calculateWaitingTime(burritoTime, friesTime);
 
         System.out.printf("There are %d serve(s) of Fries left for next %n", remainingFriesQuantity);
         System.out.printf("Please wait for %d minutes", waitTime);
     }
 
+    /*The method to compare cooking time between Burrito and Fries*/
     public int calculateWaitingTime(int burritoTime, int friesTime) {
         int waitTime = 0;
         if (burritoTime > friesTime)
@@ -231,6 +277,7 @@ public class Order {
         return waitTime;
     }
 
+    /*The method to calculate time needed to cook Burrito based on the order quantity*/
     public int burritoCookingTime(int burritoQuantity, int cookedBurritoPerBatch, int burritoPrepTime) {
         int cookingTime = 0;
         double tempTime = 0;
@@ -241,12 +288,14 @@ public class Order {
         return cookingTime;
     }
 
+    /*The method to calculate time needed to cook Fries based on the order quantity and remaining Fries*/
     public int friesCookingTime(int friesQuantity, int cookedFriesPerBatch, int friesPrepTime) {
         int cookingTime = 0;
         double tempTime = 0;
         int tempRemainingFriesQuantity = getRemainingFriesQuantity();
         int friesNeeded = 0;
 
+        // If there are remaining fries, then use the remaining fries first
         if (tempRemainingFriesQuantity >= friesQuantity) {
             tempRemainingFriesQuantity = tempRemainingFriesQuantity - friesQuantity;
             setRemainingFriesQuantity(tempRemainingFriesQuantity);
@@ -268,8 +317,8 @@ public class Order {
         return remainingFriesQuantity;
     }
 
-//    Send the details of current order to SalesReport and
-//    Reset current order to empty and zero for the next order
+    /*The method to send the details of current order to SalesReport and
+    * Reset current order to empty and zero for the next order*/
     private void clearCurrentOrder() {
         sales.setLeftoverFries(remainingFriesQuantity);
         sales.setTotalSales(totalPrice);
@@ -282,6 +331,7 @@ public class Order {
         mealCount = 0;
     }
 
+    /*The method to organize info on the current order before sending the summary of it to SalesReport*/
     private void setupInfoForSales() {
         int burritoQuantity = 0;
         int friesQuantity = 0;
@@ -310,16 +360,24 @@ public class Order {
         sendFoodQuantityAndPriceToSales("Soda", sodaQuantity, (sodaPrice*sodaQuantity));
     }
 
-
+    /*The method to take the summed information and store it inside the SalesReport*/
     private void sendFoodQuantityAndPriceToSales(String foodName, int quantity, double price) {
         sales.setFoodQuantity(foodName, quantity);
         sales.setFoodPrice(foodName, price);
     }
 
+    /*The method to read user input*/
+    public static String readUserInput() {
+        Scanner input = new Scanner(System.in);
+        return input.nextLine();
+    }
+
+    /*The method to display constant change price menu options lines*/
     private void displayChangePriceMenu() {
         System.out.printf("%n %s %n %s %n %s %n %s %n %s %n", "> Select the food item", "1. Burrito", "2. Fries", "3. Soda", "4. No more");
     }
 
+    /*The method to display constant initial menu options lines*/
     private void changePriceMenu() {
         boolean exit = false;
         String choice;
@@ -327,7 +385,9 @@ public class Order {
             displayChangePriceMenu();
             System.out.print("Please choose a food to change the price: ");
             try {
-                choice = input.nextLine();
+                choice = readUserInput();
+
+                // Validating user input and continue with the loop if the input is empty
                 validation.checkStringInput(choice);
 
                 switch (choice) {
@@ -353,6 +413,7 @@ public class Order {
         } while (!exit);
     }
 
+    /*The method to take the new price for the chosen food*/
     private void changePrice(String food){
         double newPrice = 0;
         boolean numeric = false;
@@ -361,25 +422,29 @@ public class Order {
         do {
             System.out.printf("Please input the new price for %s: ", food);
             try {
-                priceInput = input.nextLine();
+                priceInput = readUserInput();
+
+                // Validating user input and continue with the loop if the input is empty
                 validation.checkStringInput(priceInput);
+
+                // Validating user input and continue with the loop
+                // if the input is not an integer number
                 newPrice = Double.parseDouble(priceInput);
-                validation.checkNumberInput(priceInput);
                 numeric = true;
+
+                // Validating user input and continue with the loop if the input is not a valid number
+                validation.checkNumberInput(newPrice);
 
                 switch (food) {
                     case "Burrito":
-                        Burrito burrito = new Burrito("Burrito");
                         burrito.setPrice(newPrice);
                         priceChanged = true;
                         break;
                     case "Fries":
-                        Fries fries = new Fries("Fries");
                         fries.setPrice(newPrice);
                         priceChanged = true;
                         break;
                     case "Soda":
-                        Soda soda = new Soda("Soda");
                         soda.setPrice(newPrice);
                         priceChanged = true;
                         break;

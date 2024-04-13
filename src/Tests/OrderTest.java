@@ -1,13 +1,12 @@
-import org.junit.*;
-import org.junit.rules.ExpectedException;
+package Tests;
 
+import org.junit.*;
+import MainProgram.*;
 import static org.junit.Assert.*;
 
-public class OrderTest{
+/*The OrderTest Class is a JUnit Test for Order Class methods*/
 
-//    SalesReport sales = new SalesReport();
-//    Validation validation = new Validation();
-//    Order order = new Order(sales, validation);
+public class OrderTest{
 
     private SalesReport sales;
     private Validation validation;
@@ -23,31 +22,31 @@ public class OrderTest{
     @Test
     public void FriesCookingTimeWithoutRemaining(){
         order.setRemainingFriesQuantity(0);
-        assertEquals(8,order.friesCookingTime(3, 5,8));
-        assertEquals(0,order.friesCookingTime(0, 5,8));
+        Assert.assertEquals(8,order.friesCookingTime(3, 5,8));
+        Assert.assertEquals(0,order.friesCookingTime(0, 5,8));
     }
 
     @Test
     public void FriesCookingTimeWithRemaining() {
         order.setRemainingFriesQuantity(5);
-        assertEquals(8,order.friesCookingTime(7, 5,8));
+        Assert.assertEquals(8,order.friesCookingTime(7, 5,8));
     }
 
     @Test
     public void BurritoCookingTimeWithVarietyOfQuantity() {
-        assertEquals(9, order.burritoCookingTime(2,2,9));
-        assertEquals(27, order.burritoCookingTime(5,2,9));
-        assertEquals(0, order.burritoCookingTime(0,2,9));
+        Assert.assertEquals(9, order.burritoCookingTime(2,2,9));
+        Assert.assertEquals(27, order.burritoCookingTime(5,2,9));
+        Assert.assertEquals(0, order.burritoCookingTime(0,2,9));
     }
 
     @Test
     public void waitingTimeWithMoreBurrito() {
-        assertEquals(18, order.calculateWaitingTime(18,8));
+        Assert.assertEquals(18, order.calculateWaitingTime(18,8));
     }
 
     @Test
     public void waitingTimeWithMoreFries() {
-        assertEquals(24, order.calculateWaitingTime(18,24));
+        Assert.assertEquals(24, order.calculateWaitingTime(18,24));
     }
 
     @Test
@@ -72,14 +71,14 @@ public class OrderTest{
     public void TotalPriceOfAMealSetTest() {
         order.setTotalPrice(0);
         order.orderMeal(2);
-        assertEquals(21.0, order.getTotalPrice(), 0.01);
+        Assert.assertEquals(21.0, order.getTotalPrice(), 0.01);
     }
 
     @Test
     public void TotalPriceFor3Burrito2Fries1SodaAnd1Meal() {
-        Burrito burrito = new Burrito("Burrito");
-        Fries fries = new Fries("Fries");
-        Soda soda = new Soda("Soda");
+        Burrito burrito = new Burrito("MainProgram.Burrito");
+        Fries fries = new Fries("MainProgram.Fries");
+        Soda soda = new Soda("MainProgram.Soda");
 
         order.setTotalPrice(0);
         burrito.setOrderQuantity(burrito.getOrderQuantity() + 3);
@@ -90,11 +89,7 @@ public class OrderTest{
         order.addMenuToArray(soda, 1);
         order.orderMeal(1);
 
-        assertEquals(42,order.getTotalPrice(), 0.01);
+        Assert.assertEquals(42,order.getTotalPrice(), 0.01);
     }
 
-//    @AfterClass
-//    public static void tearDown() throws Exception {
-//
-//    }
 }

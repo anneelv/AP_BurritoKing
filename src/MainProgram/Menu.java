@@ -1,9 +1,13 @@
+package MainProgram;
+
+import Exceptions.*;
 import java.util.Scanner;
 
+/* The Menu class provides the initial menu of the program to do food ordering,
+show sales report and changing food price*/
+
 public class Menu {
-    private Scanner input = new Scanner(System.in);
-    private String choice = "";
-    private boolean exit = false;
+
     private Order order;
     private SalesReport sales;
     private Validation validation;
@@ -14,16 +18,23 @@ public class Menu {
         this.validation = validation;
     }
 
-    public void run() throws InvalidOptionException, EmptyUserInputException {
+    /*The method to run the initial menu display*/
+    public void run() throws EmptyUserInputException{
         mainMenu();
     }
 
-    private void mainMenu() throws InvalidOptionException, EmptyUserInputException{
+    /*The method to operate the program and keep it going based on user input*/
+    private void mainMenu() throws EmptyUserInputException {
+        String choice = "";
+        boolean exit = false;
+
         do{
             displayMenu();
             System.out.print("Please enter your choice: ");
             try {
-                choice = input.nextLine();
+                choice = readUserInput();
+
+                // Validating user input and continue with the loop if the input is empty
                 validation.checkStringInput(choice);
 
                 switch (choice) {
@@ -49,6 +60,13 @@ public class Menu {
         } while (!exit);
     }
 
+    /*The method to read user input*/
+    public static String readUserInput() {
+        Scanner input = new Scanner(System.in);
+        return input.nextLine();
+    }
+
+    /*The method to print out constant initial menu lines*/
     private void displayMenu() {
         System.out.printf("%n %s %n %S! %n %s %n", "========================================", "welcome to burrito king", "========================================");
         System.out.printf(" %s %n %s %n %s %n %s %n", "a) Order", "b) Show Sales Report", "c) Update Prices", "d) Exit");

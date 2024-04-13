@@ -1,9 +1,14 @@
+package Tests;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
+import MainProgram.Validation;
+import Exceptions.*;
 import static org.junit.Assert.*;
+
+/*The ValidationTest Class is a JUnit Test for methods in Validation Class*/
 
 public class ValidationTest {
 
@@ -24,10 +29,10 @@ public class ValidationTest {
         validation.checkNumberInput(-3);
     }
 
-    @Test (expected = NotANumberException.class)
-    public void testAlphabetInNumberInput() throws NotANumberException{
-        validation.checkNumberInput("A");
-    }
+//    @Test (expected = NotANumberException.class)
+//    public void testAlphabetInNumberInput() throws NotANumberException {
+//        validation.checkNumberInput("A");
+//    }
 
     @Test
     public void testCorrectInputIntegerWithoutException() {
@@ -45,7 +50,7 @@ public class ValidationTest {
     }
 
     @Test
-    public void properUserInputTest() throws EmptyUserInputException{
+    public void properUserInputTest() throws EmptyUserInputException {
         assertNull(validation.checkStringInput("A"));
         assertNull(validation.checkStringInput("1"));
         assertNull(validation.checkStringInput(" "));

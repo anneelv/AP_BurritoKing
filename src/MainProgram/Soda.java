@@ -1,3 +1,7 @@
+package MainProgram;
+
+/*The Soda class handles specific Soda objects with details unique to Soda*/
+
 public class Soda extends Food{
     private static double price;
 
@@ -6,7 +10,7 @@ public class Soda extends Food{
         setPrice(2.50);
     }
 
-    //    Getter and Setter for Fries price
+    /*Getter and Setter for Soda attributes*/
     public void setPrice(double newPrice) { price = newPrice; }
     public double getPrice() { return price; }
 }

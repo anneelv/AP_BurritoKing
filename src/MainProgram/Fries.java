@@ -1,3 +1,7 @@
+package MainProgram;
+
+/*The Fries class handles specific Fries objects with details unique to Fries*/
+
 public class Fries extends Food{
     private static double price;
     private final int prepTime;
@@ -10,7 +14,7 @@ public class Fries extends Food{
         quantityPerBatch = 5;
     }
 
-//    Getter and Setter for Fries price
+    /*Getter and Setter for Fries attributes*/
     public void setPrice(double newPrice) { price = newPrice; }
 
     public double getPrice() { return price; }
