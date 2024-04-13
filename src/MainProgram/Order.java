@@ -11,7 +11,7 @@ public class Order {
     private double totalPrice = 0;
     private static int remainingFriesQuantity = 0;
     private int mealCount = 0;
-    ArrayList<Food> foodOrder = new ArrayList<Food>();
+    ArrayList<Food> foodOrder = new ArrayList<>();
     private SalesReport sales;
     private Validation validation;
     private Burrito burrito;
@@ -82,7 +82,7 @@ public class Order {
 
     /*The method to set up the quantity of food ordered*/
     public void addMenu(String food) throws NotANumberException {
-        int quantity = 0;
+        int quantity;
         boolean numeric = false;
         boolean added = false;
         String orderInput;
@@ -184,7 +184,7 @@ public class Order {
         String moneyInput;
         boolean numeric = false;
         boolean paid = false;
-        double money = 0;
+        double money;
 
         do {
             System.out.print("Please enter money: ");
@@ -232,14 +232,14 @@ public class Order {
 
     /*The method to set user waiting time*/
     private void setTotalWaitTime() {
-        int waitTime = 0;
+        int waitTime;
 
-        int burritoTime = 0;
+        int burritoTime;
         int cookedBurritoPerBatch = 0;
         int burritoPrepTime = 0;
         int burritoQuantity = 0;
 
-        int friesTime = 0;
+        int friesTime;
         int cookedFriesPerBatch = 0;
         int friesPrepTime = 0;
         int friesQuantity = 0;
@@ -269,7 +269,7 @@ public class Order {
 
     /*The method to compare cooking time between Burrito and Fries*/
     public int calculateWaitingTime(int burritoTime, int friesTime) {
-        int waitTime = 0;
+        int waitTime;
         if (burritoTime > friesTime)
             waitTime = burritoTime;
         else
@@ -279,8 +279,8 @@ public class Order {
 
     /*The method to calculate time needed to cook Burrito based on the order quantity*/
     public int burritoCookingTime(int burritoQuantity, int cookedBurritoPerBatch, int burritoPrepTime) {
-        int cookingTime = 0;
-        double tempTime = 0;
+        int cookingTime;
+        double tempTime;
 
         tempTime = (double) burritoQuantity / (double) cookedBurritoPerBatch;
         cookingTime = (int) Math.ceil(tempTime) * burritoPrepTime;
@@ -291,9 +291,9 @@ public class Order {
     /*The method to calculate time needed to cook Fries based on the order quantity and remaining Fries*/
     public int friesCookingTime(int friesQuantity, int cookedFriesPerBatch, int friesPrepTime) {
         int cookingTime = 0;
-        double tempTime = 0;
+        double tempTime;
         int tempRemainingFriesQuantity = getRemainingFriesQuantity();
-        int friesNeeded = 0;
+        int friesNeeded;
 
         // If there are remaining fries, then use the remaining fries first
         if (tempRemainingFriesQuantity >= friesQuantity) {
@@ -415,7 +415,7 @@ public class Order {
 
     /*The method to take the new price for the chosen food*/
     private void changePrice(String food){
-        double newPrice = 0;
+        double newPrice;
         boolean numeric = false;
         boolean priceChanged = false;
         String priceInput;
