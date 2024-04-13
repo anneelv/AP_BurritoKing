@@ -8,6 +8,7 @@
 4. [Exceptions Package](#exceptions)
 5. [Tests Package](#test)
 6. [Running Program From Command Line](#cmdMain)
+7. [Running Tests From Command Line](#cmdTest)
 
 ## Introduction <a name="introduction"></a>
 This burrito king program consist of 3 packages and 1 Main java files. The 3 packages are as follow:
@@ -50,7 +51,14 @@ The tests created in this packages focused on methods in Order, SalesReport, and
 ## Running Program From Command Line <a name="cmdMain"></a>
 When trying to run the program from command line for the first time, we can do the following:
 1. Navigate to the program folder (AP_BurritoKing) from the command line
-2. Compile all .java files available in the folders. Use the following command: `javac ./src/Exceptions/*.java ./src/MainProgram/*.java ./src/Tests/*.java ./src/Main.java`
+2. Compile all .java files available in the folders. Use the following command: `javac ./src/Main.java`. This will help compile all related java files in the packages too.
 3. HOWEVER, since the program was created in IntelliJ it's already compiled and stored in `AP_BurritoKing/out/` folder
 4. After the program is compiled we can navigate to `./out/production/AP_BurritoKing` where the previous java files becomes `.class`
 5. Then in the command line run the following command: `java Main`
+
+## Running Tests From Command Line <a name="cmdTest"></a>
+When trying to run the test cases from command line for the first time, we can do the following:
+1. Navigate to the program folder (AP_BurritoKing) and go inside the `src` folder from the command line
+2. Compile the .java test files using the following command: `javac -cp ./Tests/junit-4.13.1.jar;. ./Tests/OrderTest.java ./Tests/ValidationTest.java ./Tests/SalesReportTest.java`. When it's working properly, there will be no output displayed. However, you can see inside the folder that there will be `.class` files for each `.java` files
+3. After the files are compiled, run the following command to run all 3 classes of test cases: `java -cp ./Tests/junit-4.13.1.jar;./Tests/hamcrest-core-1.3.jar;. org.junit.runner.JUnitCore  Tests.ValidationTest Tests.OrderTest Tests.SalesReportTest`
+4. Note: the jar files are moved to the same directory of the java files to avoid the problem of wrong directory path
