@@ -1,3 +1,7 @@
+package MainProgram;
+
+/*The Burrito class handles specific Burrito objects with details unique to Burrito*/
+
 public class Burrito extends Food{
     private static double price;
     private final int prepTime;
@@ -10,7 +14,7 @@ public class Burrito extends Food{
         quantityPerBatch = 2;
     }
 
-    //    Getter and Setter for Fries price
+    /*Getter and Setter for Burrito attributes*/
     public void setPrice(double newPrice) { price = newPrice; }
 
     public double getPrice() { return price; }

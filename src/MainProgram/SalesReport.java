@@ -1,5 +1,10 @@
+package MainProgram;
+
 import java.util.HashMap;
 import java.util.Map;
+
+/*The SalesReport class handles storing order information to be ready for display
+* at the end of the day*/
 
 public class SalesReport {
     HashMap<String, Integer> FoodQuantity = new HashMap<String, Integer>() {{
@@ -25,8 +30,10 @@ public class SalesReport {
 
     public SalesReport () { }
 
+    /*The method to show the Sales Report*/
     public void showReport() { reportStruct(); }
 
+    /*The method to organize the items to be ready for display*/
     private void reportStruct() {
         int totalFood = 0;
 
@@ -44,13 +51,15 @@ public class SalesReport {
         System.out.printf("%-19s %d %-5s $%.2f%n", " ", totalFood, " ", totalSales);
     }
 
+    /*Getter and Setter for Sales, Meals, and Remaining Fries*/
     public void setLeftoverFries(int friesQuantity) { this.leftoverFries = friesQuantity; }
-
     public void setTotalSales(double salesPrice) { totalSales += salesPrice; }
-
+    public double getTotalSales() { return totalSales; }
     public void setTotalMeals(int mealQuantity) { this.mealSold += mealQuantity; }
+    public int getFoodQuantity(String key) { return FoodQuantity.get(key); }
+    public double getFoodPrice(String key) { return FoodPrice.get(key); }
 
-//    TODO: UNIT TESTING
+    /*The method to set the number of food sold during Orders*/
     public void setFoodQuantity(String key, int quantity) {
         if (FoodQuantity.get(key) > 0){
             int newQty = FoodQuantity.get(key) + quantity;
@@ -61,8 +70,7 @@ public class SalesReport {
         }
     }
 
-//    TODO: UNIT TESTING
-//    The total food price based on the type and number of food ordered
+    /*The method to keep up the price sum of food sold*/
     public void setFoodPrice(String key, double price) {
         if (FoodPrice.get(key) > 0){
             double newPrice = FoodPrice.get(key) + price;
@@ -73,11 +81,12 @@ public class SalesReport {
         }
     }
 
-    private void changeFoodPrice(String key, double price){
+    /*The method to change the price sum of a certain item*/
+    public void changeFoodPrice(String key, double price){
         FoodPrice.put(key, price);
     }
 
-//    TODO: UNIT TESTING
+    /*The method to handle recalculating total sales when there's a price change*/
     public void recalculateTotalSales(String key, double price){
         totalSales = 0;
         int foodQuantity = FoodQuantity.get(key);

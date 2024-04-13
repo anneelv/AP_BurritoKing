@@ -1,12 +1,16 @@
+package MainProgram;
+
+/*The Food class handles the foods that are available on BurritoKing*/
+
 abstract public class Food {
     private String name;
-    private int orderQuantity;
+    private int orderQuantity = 0;
 
     public Food(String name) {
         setName(name);
     }
 
-    //    Getter and Setter for the constructor
+    /*Getter and Setter for Food attributes*/
     public void setName(String foodName) { this.name = foodName; }
 
     public String getName() { return this.name; }
