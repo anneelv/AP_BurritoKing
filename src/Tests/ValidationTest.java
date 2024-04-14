@@ -29,11 +29,6 @@ public class ValidationTest {
         validation.checkNumberInput(-3);
     }
 
-//    @Test (expected = NotANumberException.class)
-//    public void testAlphabetInNumberInput() throws NotANumberException {
-//        validation.checkNumberInput("A");
-//    }
-
     @Test
     public void testCorrectInputIntegerWithoutException() {
         assertNull(validation.checkNumberInput(4));
